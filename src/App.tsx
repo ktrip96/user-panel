@@ -1,11 +1,16 @@
 import Layout from "./components/Layout";
-import UserList from "./UserList";
+import UserList from "./containers/UserList";
+import FormContainer from "./containers/FormContainer";
+import { UserContextProvider } from "./context/UserContext";
 
 function App() {
   return (
-    <Layout>
-      <UserList />
-    </Layout>
+    <UserContextProvider>
+      <Layout>
+        <UserList />
+        <FormContainer />
+      </Layout>
+    </UserContextProvider>
   );
 }
 
