@@ -10,7 +10,7 @@ type Props = {
 
 const UserContextProvider = ({ children }: Props) => {
 
-    const [selectedUser, setSelectedUser] = useState<User | undefined>()
+    const [selectedUser, setSelectedUser] = useState<User>({} as User)
 
     return (
         <UserContext.Provider value={{ selectedUser, setSelectedUser }}>
