@@ -10,5 +10,7 @@ export interface User {
 
 export interface UserContextType {
   selectedUser: User
+  users: User[]
   setSelectedUser: React.Dispatch<React.SetStateAction<User>>
+  setUsers: React.Dispatch<React.SetStateAction<User[]>>
 }

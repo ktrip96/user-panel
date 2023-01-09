@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { User } from '../@types/user'
 import UserContext from '../context/UserContext'
+import { updateData } from '../helper/axios'
 
 type Props = {}
 
 
 const FormContainer = (props: Props) => {
-    const { selectedUser } = useContext(UserContext)
+    const { selectedUser, setSelectedUser, setUsers } = useContext(UserContext)
     const [userData, setUserData] = useState<User>(selectedUser)
     const [isEdited, setIsEdited] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -24,6 +25,7 @@ const FormContainer = (props: Props) => {
     }, [userData, selectedUser])
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
         setUserData(prev => {
             return {
                 ...prev,
@@ -34,13 +36,31 @@ const FormContainer = (props: Props) => {
         if (!isEdited) {
             setIsEdited(true)
         }
-
     }
 
+    const handleSave = (event: React.SyntheticEvent): void => {
+        event.preventDefault()
+        setIsLoading(true)
+        updateData("https://my-json-server.typicode.com/tsevdos/epignosis-users/users/" + userData.id, userData)
+            .then(() => {
+                setSelectedUser(userData)
+                setUsers(prev => {
+                    const updatedUsers = prev.map(user => user.id === userData.id ? userData : user)
+                    return [
+                        ...updatedUsers
+                    ]
+                })
+                setIsLoading(false)
+            })
+    }
+
+    const handleCancel = (): void => {
+        setUserData(selectedUser)
+    }
 
     return (
         <div className={`w-full md:w-1/2 p-5 pb-20 relative`}>
-            <form className='p-5 h-full overflow-y-auto '>
+            <form onSubmit={handleSave} className='p-5 h-full overflow-y-auto'>
 
                 {/* input forms */}
 
@@ -60,10 +80,10 @@ const FormContainer = (props: Props) => {
                 {/* buttons */}
 
                 <div className={`${Object.keys(userData).length === 0 && "hidden"} flex absolute lg:bottom-10 bottom-5 right-5  gap-2`}>
-                    <button type="submit" className={`${!isEdited && "hidden"} py-3 px-4 bg-[var(--cancel-btn-bg)] min-w-[70px] rounded-md text-center text-lg lg:text-xl text-gray-600 hover:scale-105 hover:shadow-lg transition `}>
+                    <button onClick={handleCancel} type="button" className={`${!isEdited && "hidden"} py-3 px-4 bg-[var(--cancel-btn-bg)] min-w-[70px] rounded-md text-center text-lg lg:text-xl text-gray-600 hover:scale-105 hover:shadow-lg transition `}>
                         Cancel
                     </button>
-                    <button type="submit" disabled className={`${!isEdited && "opacity-70"} py-3 px-4 bg-[var(--save-btn-bg)] rounded-md text-white text-lg lg:text-xl enabled:hover:scale-105 enabled:hover:shadow-lg transition`}>
+                    <button type="submit" disabled={shallowEqual(selectedUser, userData) === true} className={`${!isEdited && "opacity-70"} py-3 px-4 bg-[var(--save-btn-bg)] rounded-md text-white text-lg lg:text-xl enabled:hover:scale-105 enabled:hover:shadow-lg transition`}>
                         {isLoading ?
                             <div className='ml-3'>
                                 <svg aria-hidden="true" className={`w-6 h-6 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-gray-400`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

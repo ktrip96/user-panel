@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import UserBox from '../components/UserBox'
 import { getData } from '../helper/axios'
 import { User } from '../@types/user'
-import Loading from '../components/Loading'
+import UserContext from '../context/UserContext'
 
 const UserList = () => {
 
-    const [users, setUsers] = useState<User[]>([])
+    const { users, setUsers } = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const UserList = () => {
                 setUsers(res)
                 setIsLoading(false)
             })
-    }, [])
+    }, [setUsers])
 
     if (isLoading) return (
         <div className='w-1/2 flex justify-center items-center'>
