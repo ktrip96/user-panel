@@ -3,26 +3,26 @@
 @tailwind utilities;
 
 :root {
-  --body-bg: whitesmoke;
-  --user-bg: #1b68b3;
-  --user-hover-bg: #e8e8e8;
-  --label: grey;
-  --input-border: #ececec;
-  --save-btn-bg: #1b68b3;
-  --cancel-btn-bg: #e8e7e7;
+	--body-bg: whitesmoke;
+	--user-bg: #1b68b3;
+	--user-hover-bg: #e8e8e8;
+	--label: grey;
+	--input-border: #ececec;
+	--save-btn-bg: #1b68b3;
+	--cancel-btn-bg: #e8e7e7;
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--body-bg);
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: var(--body-bg);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
 }
