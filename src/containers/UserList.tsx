@@ -9,13 +9,22 @@ const UserList = () => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		getData(
-			'https://my-json-server.typicode.com/tsevdos/epignosis-users/users'
-		).then((res: User[]) => {
-			setUsers(res)
+		const cachedData = sessionStorage.getItem('users')
+		if (cachedData) {
+			const users = JSON.parse(cachedData)
+			setUsers(users)
 			setIsLoading(false)
-		})
-	}, [setUsers])
+		} else {
+			getData('https://my-json-server.typicode.com/tsevdos/epignosis-users/users').then(
+				(res: User[]) => {
+					setUsers(res)
+					setIsLoading(false)
+					sessionStorage.setItem('users', JSON.stringify(res))
+				}
+			)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	if (isLoading)
 		return (
@@ -40,11 +49,12 @@ const UserList = () => {
 		)
 
 	return (
-		<div className='w-fit min-w-[100px] overflow-y-auto h-full'>
+		<ul className='w-fit min-w-[100px] overflow-y-auto h-full'>
+			<span className='sr-only'>User list</span>
 			{users.map((user: User) => (
 				<UserBox key={user.id} user={user} />
 			))}
-		</div>
+		</ul>
 	)
 }
 

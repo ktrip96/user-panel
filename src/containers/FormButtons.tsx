@@ -8,18 +8,13 @@ type Props = {
 	handleCancel: () => void
 }
 
-const FormButtons = ({
-	isLoading,
-	isEdited,
-	isDisabled,
-	handleSave,
-	handleCancel,
-}: Props) => {
+const FormButtons = ({ isLoading, isEdited, isDisabled, handleSave, handleCancel }: Props) => {
 	return (
 		<div className='flex absolute lg:bottom-10 bottom-5 right-5  gap-2'>
 			<button
 				onClick={handleCancel}
 				type='button'
+				aria-label='cancel-button'
 				className={`${
 					!isEdited && 'hidden'
 				} py-3 px-4 bg-[var(--cancel-btn-bg)] min-w-[70px] rounded-md text-center text-lg lg:text-xl text-gray-600 hover:scale-105 hover:shadow-lg transition `}

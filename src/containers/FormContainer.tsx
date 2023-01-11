@@ -4,9 +4,8 @@ import UserContext from '../context/UserContext'
 import { updateData } from '../helper/axios'
 import FormButtons from './FormButtons'
 import FormInputs from './FormInputs'
-import { toastRender } from '../helper/utilities'
 import { isEmpty, isValidEmail } from '../helper/validators'
-import { shallowEqual, isObjectEmpty } from '../helper/utilities'
+import { shallowEqual, isObjectEmpty, toastRender } from '../helper/utilities'
 
 const FormContainer = () => {
 	const { selectedUser, setSelectedUser, setUsers } = useContext(UserContext)
@@ -28,13 +27,11 @@ const FormContainer = () => {
 		}
 	}, [userData, selectedUser])
 
-	const handleInputChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	): void => {
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		setUserData((prev) => {
 			return {
 				...prev,
-				[event.target.name]: event.target.value,
+				[e.target.name]: e.target.value,
 			}
 		})
 		if (!isEdited) {
@@ -42,27 +39,18 @@ const FormContainer = () => {
 		}
 	}
 
-	const handleSave = (event: React.SyntheticEvent): void => {
-		event.preventDefault()
-		if (
-			isEmpty(nameRef.current?.value) ||
-			isEmpty(phoneRef.current?.value) ||
-			!isValidEmail(emailRef.current?.value)
-		) {
-			toastRender('error', 'There are errors in the form')
+	const handleSave = (e: React.SyntheticEvent): void => {
+		e.preventDefault()
+		if (isInvalidForm(nameRef, phoneRef, emailRef)) {
+			toastRender('error', 'Error in the form')
 			return
 		}
 		setIsLoading(true)
-		updateData(
-			'https://my-json-server.typicode.com/tsevdos/epignosis-users/users/' +
-				userData.id,
-			userData
-		).then(() => {
+		const url = 'https://my-json-server.typicode.com/tsevdos/epignosis-users/users/'
+		updateData(url + userData.id, userData).then(() => {
 			setSelectedUser(userData)
 			setUsers((prev) => {
-				const updatedUsers = prev.map((user) =>
-					user.id === userData.id ? userData : user
-				)
+				const updatedUsers = prev.map((user) => (user.id === userData.id ? userData : user))
 				return [...updatedUsers]
 			})
 			setIsLoading(false)
@@ -76,8 +64,9 @@ const FormContainer = () => {
 
 	return (
 		<div className={`w-full md:w-1/2 p-5 pb-20 relative`}>
-			<form onSubmit={handleSave} className='p-5 h-full overflow-y-auto'>
-				{!isObjectEmpty(selectedUser) && (
+			<span className='sr-only'>Input fields</span>
+			{!isObjectEmpty(selectedUser) ? (
+				<form onSubmit={handleSave} className='p-5 h-full overflow-y-auto'>
 					<FormInputs
 						handleInputChange={handleInputChange}
 						nameRef={nameRef}
@@ -85,8 +74,6 @@ const FormContainer = () => {
 						emailRef={emailRef}
 						userData={userData}
 					/>
-				)}
-				{!isObjectEmpty(selectedUser) && (
 					<FormButtons
 						handleCancel={handleCancel}
 						handleSave={handleSave}
@@ -94,9 +81,23 @@ const FormContainer = () => {
 						isEdited={isEdited}
 						isLoading={isLoading}
 					/>
-				)}
-			</form>
+				</form>
+			) : (
+				<span className='sr-only'>You have to select a user to edit his info</span>
+			)}
 		</div>
+	)
+}
+
+function isInvalidForm(
+	nameRef: React.RefObject<HTMLInputElement>,
+	phoneRef: React.RefObject<HTMLInputElement>,
+	emailRef: React.RefObject<HTMLInputElement>
+): boolean {
+	return (
+		isEmpty(nameRef.current?.value) ||
+		isEmpty(phoneRef.current?.value) ||
+		!isValidEmail(emailRef.current?.value)
 	)
 }
 

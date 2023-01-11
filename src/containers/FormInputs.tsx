@@ -10,13 +10,7 @@ type Props = {
 	userData: User
 }
 
-const FormInputs = ({
-	handleInputChange,
-	userData,
-	nameRef,
-	emailRef,
-	phoneRef,
-}: Props) => {
+const FormInputs = ({ handleInputChange, userData, nameRef, emailRef, phoneRef }: Props) => {
 	return (
 		<>
 			<div className='flex flex-col mb-2'>
@@ -24,18 +18,16 @@ const FormInputs = ({
 				<input
 					onChange={handleInputChange}
 					ref={nameRef}
+					aria-label='input-name'
 					name='name'
 					type='text'
 					placeholder='Enter name'
 					value={userData.name}
 					className={`rounded w-full py-2 px-3 leading-tight text-lg lg:text-xl focus:outline-blue-500 focus:shadow ${
-						isEmpty(userData.name) &&
-						'border border-red-400 focus:outline-red-400'
+						isEmpty(userData.name) && 'border border-red-400 focus:outline-red-400'
 					} `}
 				/>
-				{isEmpty(userData.name) && (
-					<p className='text-red-400 ml-2'>Name is a required field</p>
-				)}
+				{isEmpty(userData.name) && <p className='text-red-400 ml-2'>Name is a required field</p>}
 			</div>
 			<div className='flex flex-col mb-2'>
 				<label className='lg:text-lg text-gray-500 py-2'> Email address </label>
@@ -47,8 +39,7 @@ const FormInputs = ({
 					placeholder='Enter email'
 					value={userData.email}
 					className={`rounded w-full py-2 px-3 leading-tight text-lg lg:text-xl focus:outline-blue-500 focus:shadow ${
-						!isValidEmail(userData.email) &&
-						'border border-red-400 focus:outline-red-400'
+						!isValidEmail(userData.email) && 'border border-red-400 focus:outline-red-400'
 					} `}
 				/>
 				{!isValidEmail(userData.email) && (
@@ -65,13 +56,10 @@ const FormInputs = ({
 					placeholder='Enter phone'
 					value={userData.phone}
 					className={`rounded w-full py-2 px-3 leading-tight text-lg lg:text-xl focus:outline-blue-500 focus:shadow ${
-						isEmpty(userData.phone) &&
-						'border border-red-400 focus:outline-red-400'
+						isEmpty(userData.phone) && 'border border-red-400 focus:outline-red-400'
 					} `}
 				/>
-				{isEmpty(userData.phone) && (
-					<p className='text-red-400 ml-2'>Phone is a required field</p>
-				)}
+				{isEmpty(userData.phone) && <p className='text-red-400 ml-2'>Phone is a required field</p>}
 			</div>
 			<div className='flex flex-col mb-2'>
 				<label className='lg:text-lg text-gray-500 py-2'> Address </label>
