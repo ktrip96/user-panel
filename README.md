@@ -1,46 +1,55 @@
-# Getting Started with Create React App
+## User panel application 💻
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The admin panel consists of 2 horizontal panels. At the left panel you have a list of users.
+Each list item contains a photo along with their name and their email (if we have this
+data). At the right panel you have a form to edit the data of a selected user.
 
-## Available Scripts
+### Running the app :star:
 
-In the project directory, you can run:
+The app is deployed on https://user-panel-omega.vercel.app/
+If you want to run it locally, clone the repo and run:
+```
+npm install
+npm start
+```
 
-### `npm start`
+<img src="userpanel.png" width="800" height="800">
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### User stories :point_left:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Load all the users at the left panel. 
+- When you click on a user (left panel):
+  * The right panel should display the corresponding user's data within a form.
+- When you edit a user's data:
+  * The Save button should be enabled
+  * The Cancel button should appear
+- When you click Save:
+  * Make an HTTP PUT request with the new user data to the appropriate
+endpoint
+  * Cancel button should disappear
+  * Save button should be disabled
+- When you click Cancel:
+  * The form fields should reset to its previous saved data (state)
+  * Cancel button should disappear
+  * Save button should be disabled
 
-### `npm test`
+### Notes :speech_balloon:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ **Tech Used** :
+  1. Typescript
+  2. Tailwind CSS
+  3. React Hooks
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Accessibility :innocent:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
++ Added content only for screen readers
++ Made users focusable in order for screen readers to be able to read.
 
-### `npm run eject`
+### Performance :rocket:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Lazy loading user images
+- Caching HTTP request.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+<img src="userPanelLighthouse.png" width="700" height="250">
