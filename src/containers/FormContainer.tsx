@@ -3,7 +3,7 @@ import { User } from '../@types/user'
 import UserContext from '../context/UserContext'
 import { updateData } from '../helper/axios'
 import FormButtons from './FormButtons'
-import FormInputs from './FormInputs'
+import FormInputs, { FormRefHandler } from './FormInputs'
 import { isEmpty, isValidEmail } from '../helper/validators'
 import { shallowEqual, isObjectEmpty, toastRender } from '../helper/utilities'
 
@@ -13,13 +13,15 @@ const FormContainer = () => {
 	const [isEdited, setIsEdited] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
-	const nameRef = useRef<HTMLInputElement>(null)
-	const phoneRef = useRef<HTMLInputElement>(null)
-	const emailRef = useRef<HTMLInputElement>(null)
+	const formInputRef = useRef<FormRefHandler>(null)
 
 	useEffect(() => {
 		setUserData(selectedUser)
 	}, [selectedUser])
+
+	// We need to compare the state data with the database data
+	// in order to show/hide the Cancel button
+	// and enable/disable the Save button
 
 	useEffect(() => {
 		if (shallowEqual(selectedUser, userData) === true) {
@@ -28,12 +30,15 @@ const FormContainer = () => {
 	}, [userData, selectedUser])
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		// I am using state in order to store userData
+		// because I want dynamic error handling
 		setUserData((prev) => {
 			return {
 				...prev,
 				[e.target.name]: e.target.value,
 			}
 		})
+
 		if (!isEdited) {
 			setIsEdited(true)
 		}
@@ -41,7 +46,11 @@ const FormContainer = () => {
 
 	const handleSave = (e: React.SyntheticEvent): void => {
 		e.preventDefault()
-		if (isInvalidForm(nameRef, phoneRef, emailRef)) {
+		const name = formInputRef.current?.getNameValue()
+		const phone = formInputRef.current?.getPhoneValue()
+		const email = formInputRef.current?.getEmailValue()
+
+		if (isInvalidForm(name, phone, email)) {
 			toastRender('error', 'Error in the form')
 			return
 		}
@@ -67,13 +76,7 @@ const FormContainer = () => {
 			<span className='sr-only'>Input fields</span>
 			{!isObjectEmpty(selectedUser) ? (
 				<form onSubmit={handleSave} className='p-5 h-full overflow-y-auto'>
-					<FormInputs
-						handleInputChange={handleInputChange}
-						nameRef={nameRef}
-						phoneRef={phoneRef}
-						emailRef={emailRef}
-						userData={userData}
-					/>
+					<FormInputs ref={formInputRef} handleInputChange={handleInputChange} userData={userData} />
 					<FormButtons
 						handleCancel={handleCancel}
 						handleSave={handleSave}
@@ -89,16 +92,10 @@ const FormContainer = () => {
 	)
 }
 
-function isInvalidForm(
-	nameRef: React.RefObject<HTMLInputElement>,
-	phoneRef: React.RefObject<HTMLInputElement>,
-	emailRef: React.RefObject<HTMLInputElement>
-): boolean {
-	return (
-		isEmpty(nameRef.current?.value) ||
-		isEmpty(phoneRef.current?.value) ||
-		!isValidEmail(emailRef.current?.value)
-	)
+type Input = string | undefined
+
+function isInvalidForm(name: Input, phone: Input, email: Input): boolean {
+	return isEmpty(name) || isEmpty(phone) || !isValidEmail(email)
 }
 
 export default FormContainer

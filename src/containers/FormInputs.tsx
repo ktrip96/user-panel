@@ -1,16 +1,31 @@
-import React from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import { User } from '../@types/user'
 import { isEmpty, isValidEmail } from '../helper/validators'
 
 type Props = {
 	handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-	nameRef: React.RefObject<HTMLInputElement>
-	phoneRef: React.RefObject<HTMLInputElement>
-	emailRef: React.RefObject<HTMLInputElement>
 	userData: User
 }
 
-const FormInputs = ({ handleInputChange, userData, nameRef, emailRef, phoneRef }: Props) => {
+export type FormRefHandler = {
+	getNameValue: () => string | undefined
+	getEmailValue: () => string | undefined
+	getPhoneValue: () => string | undefined
+}
+
+const FormInputs = React.forwardRef<FormRefHandler, Props>(({ handleInputChange, userData }: Props, ref) => {
+	const nameRef = useRef<HTMLInputElement>(null)
+	const phoneRef = useRef<HTMLInputElement>(null)
+	const emailRef = useRef<HTMLInputElement>(null)
+
+	useImperativeHandle(ref, () => {
+		return {
+			getNameValue: () => nameRef.current?.value,
+			getPhoneValue: () => phoneRef.current?.value,
+			getEmailValue: () => emailRef.current?.value,
+		}
+	})
+
 	return (
 		<>
 			<div className='flex flex-col mb-2'>
@@ -42,9 +57,7 @@ const FormInputs = ({ handleInputChange, userData, nameRef, emailRef, phoneRef }
 						!isValidEmail(userData.email) && 'border border-red-400 focus:outline-red-400'
 					} `}
 				/>
-				{!isValidEmail(userData.email) && (
-					<p className='text-red-400 ml-2'>This email is not valid</p>
-				)}
+				{!isValidEmail(userData.email) && <p className='text-red-400 ml-2'>This email is not valid</p>}
 			</div>
 			<div className='flex flex-col mb-2'>
 				<label className='lg:text-lg text-gray-500 py-2'> Phone </label>
@@ -85,6 +98,6 @@ const FormInputs = ({ handleInputChange, userData, nameRef, emailRef, phoneRef }
 			</div>
 		</>
 	)
-}
+})
 
 export default FormInputs
