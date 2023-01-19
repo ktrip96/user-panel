@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { User } from '../@types/user'
-import UserContext from '../context/UserContext'
 import { updateData } from '../helper/axios'
 import FormButtons from './FormButtons'
 import FormInputs, { FormRefHandler } from './FormInputs'
 import { isEmpty, isValidEmail } from '../helper/validators'
 import { shallowEqual, isObjectEmpty, toastRender } from '../helper/utilities'
+import useUserContext from '../context/UserContext'
 
 const FormContainer = () => {
-	const { selectedUser, setSelectedUser, setUsers } = useContext(UserContext)
+	const { selectedUser, setSelectedUser, setUsers } = useUserContext()
 	const [userData, setUserData] = useState<User>(selectedUser)
 	const [isEdited, setIsEdited] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -56,15 +56,17 @@ const FormContainer = () => {
 		}
 		setIsLoading(true)
 		const url = 'https://my-json-server.typicode.com/tsevdos/epignosis-users/users/'
-		updateData(url + userData.id, userData).then(() => {
-			setSelectedUser(userData)
-			setUsers((prev) => {
-				const updatedUsers = prev.map((user) => (user.id === userData.id ? userData : user))
-				return [...updatedUsers]
+		updateData(url + userData.id, userData)
+			.then(() => {
+				setSelectedUser(userData)
+				setUsers((prev) => {
+					const updatedUsers = prev.map((user) => (user.id === userData.id ? userData : user))
+					return [...updatedUsers]
+				})
+				setIsLoading(false)
+				toastRender('success', 'User updated!')
 			})
-			setIsLoading(false)
-			toastRender('success', 'User updated!')
-		})
+			.catch((e) => console.error(e))
 	}
 
 	const handleCancel = (): void => {
@@ -72,7 +74,7 @@ const FormContainer = () => {
 	}
 
 	return (
-		<div className={`w-full md:w-1/2 p-5 pb-20 relative`}>
+		<div className='w-full md:w-1/2 p-5 pb-20 relative'>
 			<span className='sr-only'>Input fields</span>
 			{!isObjectEmpty(selectedUser) ? (
 				<form onSubmit={handleSave} className='p-5 h-full overflow-y-auto'>

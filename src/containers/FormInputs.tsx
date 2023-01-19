@@ -18,6 +18,12 @@ const FormInputs = React.forwardRef<FormRefHandler, Props>(({ handleInputChange,
 	const phoneRef = useRef<HTMLInputElement>(null)
 	const emailRef = useRef<HTMLInputElement>(null)
 
+	// The parent ((FormContainer.tsx) of this component
+	// needs to access name, phone and email values
+	// in order to prevent / allow the PUT request
+	// We could use state and props, but that way
+	// we would cause many unnecessary rerenders of the FormContainer
+
 	useImperativeHandle(ref, () => {
 		return {
 			getNameValue: () => nameRef.current?.value,

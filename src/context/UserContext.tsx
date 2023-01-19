@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react'
+import { ReactNode, createContext, useState, useContext } from 'react'
 import { User, UserContextType } from '../@types/user'
 
 const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -18,5 +18,7 @@ const UserContextProvider = ({ children }: Props) => {
 	)
 }
 
-export default UserContext
+const useUserContext = () => useContext(UserContext)
+
+export default useUserContext
 export { UserContextProvider }
