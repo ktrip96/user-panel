@@ -20,5 +20,5 @@ export function shallowEqual(object1: User, object2: User): boolean {
 }
 
 export function isObjectEmpty(object: User): boolean {
-	return Object.keys(object).length === 0
+	return Object.keys(object).length === 0 || Object.values(object).every((x) => x === '')
 }

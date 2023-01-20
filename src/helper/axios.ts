@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { User } from '../@types/user'
 
-export const getData = async (url: string): Promise<any> => {
+export const getData = async (url: string): Promise<User[]> => {
 	const { data } = await axios.get(url)
 	return data
 }

@@ -8,7 +8,15 @@ type Props = {
 }
 
 const UserContextProvider = ({ children }: Props) => {
-	const [selectedUser, setSelectedUser] = useState<User>({} as User)
+	const [selectedUser, setSelectedUser] = useState<User>({
+		id: '',
+		photo: '',
+		name: '',
+		email: '',
+		phone: '',
+		address: '',
+		company: '',
+	})
 	const [users, setUsers] = useState<User[]>([])
 
 	return (
