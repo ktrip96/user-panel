@@ -1,4 +1,4 @@
-function Loading({ width, height }: { width: number; height: number }) {
+function Loading({ width, height }: { width: string; height: string }) {
 	return (
 		<div>
 			<svg

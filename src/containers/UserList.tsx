@@ -29,7 +29,7 @@ const UserList = () => {
 	if (isLoading)
 		return (
 			<div className='w-1/2 flex justify-center items-center'>
-				<Loading width={16} height={16} />
+				<Loading width={'16'} height={'16'} />
 			</div>
 		)
 

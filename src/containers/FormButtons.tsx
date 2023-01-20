@@ -10,7 +10,6 @@ type Props = {
 }
 
 const FormButtons = ({ isLoading, isEdited, isDisabled, handleSave, handleCancel }: Props) => {
-	console.log('Form Buttons Render')
 	return (
 		<div className='flex absolute lg:bottom-10 bottom-5 right-5  gap-2'>
 			<button
@@ -33,7 +32,7 @@ const FormButtons = ({ isLoading, isEdited, isDisabled, handleSave, handleCancel
 			>
 				{isLoading ? (
 					<div className='ml-3'>
-						<Loading width={6} height={6} />
+						<Loading width={'6'} height={'6'} />
 					</div>
 				) : (
 					'Save'
