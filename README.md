@@ -6,7 +6,6 @@ data). At the right panel you have a form to edit the data of a selected user.
 
 ### Running the app :star:
 
-The app is deployed on https://user-panel-omega.vercel.app/
 If you want to run it locally, clone the repo and run:
 ```
 npm install
